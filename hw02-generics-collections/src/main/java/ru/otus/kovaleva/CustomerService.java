@@ -1,13 +1,14 @@
 package ru.otus.kovaleva;
 
+import java.util.NavigableMap;
+import java.util.TreeMap;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.Objects;
-import java.util.TreeMap;
 
 public class CustomerService {
 
-    private TreeMap<Customer, String> customers;
+    private final NavigableMap<Customer, String> customers;
 
     public CustomerService() {
         this.customers = new TreeMap<>(Comparator.comparingLong(c -> c.getScores()));
