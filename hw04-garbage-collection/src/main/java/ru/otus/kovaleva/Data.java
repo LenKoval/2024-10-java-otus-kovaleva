@@ -2,13 +2,13 @@ package ru.otus.kovaleva;
 
 public class Data {
 
-    private final Integer value;
+    private final int value;
 
-    public Data(Integer value) {
+    public Data(int value) {
         this.value = value;
     }
 
-    public Integer getValue() {
+    public int getValue() {
         return value;
     }
 }
