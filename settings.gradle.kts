@@ -2,6 +2,7 @@ rootProject.name = "otusJava"
 include("hw01-gradle")
 include("hw02-generics-collections")
 include("hw03-annotations")
+include("hw04-garbage-collection")
 
 pluginManagement {
     val jgitver: String by settings
