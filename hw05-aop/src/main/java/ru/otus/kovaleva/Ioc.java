@@ -22,29 +22,29 @@ public class Ioc {
     }
 
     static class DemoInvocationHandler implements InvocationHandler {
-        private final TestLoggingInterface myClass;
+        private final Object target;
         private static final Set<Method> annotatedMethods = new LinkedHashSet<>();
 
-        DemoInvocationHandler(TestLoggingInterface myClass) {
-            Method[] declaredMethods = myClass.getClass().getDeclaredMethods();
+        DemoInvocationHandler(Object target) {
+            Method[] declaredMethods = target.getClass().getDeclaredMethods();
             for (Method method : declaredMethods) {
                 if (method.isAnnotationPresent(Log.class)) {
                     annotatedMethods.add(method);
                 }
             }
-            this.myClass = myClass;
+            this.target = target;
         }
 
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-            Method targetMethod = myClass.getClass().getDeclaredMethod(method.getName(), method.getParameterTypes());
+            Method targetMethod = target.getClass().getDeclaredMethod(method.getName(), method.getParameterTypes());
 
             if (annotatedMethods.contains(targetMethod)) {
                 for (Object arg : args) {
                     logger.info("executed method: " + targetMethod.getName() + ", param:" + arg);
                 }
             }
-            return method.invoke(myClass, args);
+            return method.invoke(target, args);
         }
     }
 }
