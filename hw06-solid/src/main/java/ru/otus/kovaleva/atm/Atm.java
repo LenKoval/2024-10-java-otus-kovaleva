@@ -6,7 +6,7 @@ import java.util.Collection;
 
 public interface Atm {
 
-    void load(Banknote banknote);
+    void load(Collection<Banknote> banknotes);
 
     Collection<Banknote> cashOut(int amount);
 

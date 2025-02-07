@@ -2,92 +2,106 @@ package ru.otus.kovaleva;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.otus.kovaleva.atm.Atm;
 import ru.otus.kovaleva.atm.AtmImpl;
 import ru.otus.kovaleva.banknotes.Banknote;
-import ru.otus.kovaleva.banknotes.OneHundredBanknote;
-import ru.otus.kovaleva.banknotes.FiveHundredBanknote;
-import ru.otus.kovaleva.banknotes.OneThousandBanknote;
-import ru.otus.kovaleva.banknotes.TwoThousandBanknote;
 import ru.otus.kovaleva.exceptions.AtmCashOutException;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class AtmImplTest {
 
-    private AtmImpl atm;
+    private Atm atm;
+    private int initialBalance;
+    private Banknote[] banknotesForTest = {Banknote.ONE_HUNDRED,
+            Banknote.TWO_HUNDRED,
+            Banknote.ONE_THOUSAND,
+            Banknote.ONE_HUNDRED,
+            Banknote.FIVE_HUNDRED,
+            Banknote.ONE_HUNDRED,
+            Banknote.TWO_HUNDRED,
+            Banknote.ONE_HUNDRED,
+            Banknote.ONE_HUNDRED,
+            Banknote.FIVE_THOUSAND,
+            Banknote.TWO_THOUSAND,
+            Banknote.TWO_HUNDRED,
+            Banknote.FIVE_THOUSAND,
+            Banknote.ONE_THOUSAND};
 
     @BeforeEach
-    void setUp() {
+    void before() {
         atm = new AtmImpl();
+
+        Collection<Banknote> banknotes = new ArrayList<>();
+        for (Banknote banknote : this.banknotesForTest) {
+            banknotes.add(banknote);
+            initialBalance += banknote.faceValue();
+        }
+        atm.load(banknotes);
     }
 
     @Test
-    void testLoadBanknote() {
-        Banknote banknote = new OneHundredBanknote();
-        atm.load(banknote);
-        assertEquals(100, atm.getBalance());
+    void load() {
+        List<Banknote> banknotesToLoad = List.of(Banknote.TWO_HUNDRED, Banknote.ONE_HUNDRED);
+
+        atm.load(banknotesToLoad);
+
+        assertEquals(initialBalance + 300, atm.getBalance());
     }
 
     @Test
-    void testMultipleLoads() {
-        Banknote hundred = new OneHundredBanknote();
-        Banknote fiveHundred = new FiveHundredBanknote();
+    void cashOutMinCorrect() {
+        int amount = 100;
 
-        atm.load(hundred);
-        atm.load(fiveHundred);
+        Collection<Banknote> b1 = atm.cashOut(amount);
 
-        assertEquals(600, atm.getBalance());
+        assertEquals(1, b1.size());
+        assertEquals(amount, (int) b1.stream().map(Banknote::faceValue).reduce(Integer::sum).get());
     }
 
     @Test
-    void testCashOutExactAmount() {
-        Banknote hundred = new OneHundredBanknote();
-        atm.load(hundred);
+    void cashOutMaxCorrect() {
+        int amount  = initialBalance;
 
-        var result = atm.cashOut(100);
-        assertEquals(1, result.size());
-        assertTrue(result.contains(hundred));
-        assertEquals(0, atm.getBalance());
+        Collection<Banknote> b2 = atm.cashOut(amount);
+
+        assertEquals(banknotesForTest.length, b2.size());
+        assertEquals(amount, (int) b2.stream().map(Banknote::faceValue).reduce(Integer::sum).get());
     }
 
     @Test
-    void testCashOutMultipleBanknotes() {
-        Banknote hundred = new OneHundredBanknote();
-        Banknote oneThousand = new OneThousandBanknote();
+    void cashCorrect() {
+        int amount = 200;
 
-        atm.load(hundred);
-        atm.load(oneThousand);
+        Collection<Banknote> b2 = atm.cashOut(amount);
 
-        var result = atm.cashOut(1100);
-        assertEquals(2, result.size());
-        assertTrue(result.containsAll(List.of(hundred, oneThousand)));
-        assertEquals(0, atm.getBalance());
+        assertEquals(1, b2.size());
+        assertEquals(amount, (int) b2.stream().map(Banknote::faceValue).reduce(Integer::sum).get());
     }
 
     @Test
-    void testCashOutInsufficientFunds() {
-        Banknote twoThousand = new TwoThousandBanknote();
-        atm.load(twoThousand);
+    void cashOutNegative() {
+        int amount = -1;
 
-        assertThrows(AtmCashOutException.class, () -> atm.cashOut(2100));
-        assertEquals(2000, atm.getBalance());
+        assertThrows(AtmCashOutException.class, () -> atm.cashOut(amount));
     }
 
     @Test
-    void testCashOutInvalidAmount() {
-        Banknote hundred = new OneHundredBanknote();
-        atm.load(hundred);
+    void cashIncorrect() {
+        int amount = 1;
 
-        assertThrows(AtmCashOutException.class, () -> atm.cashOut(75));
-        assertEquals(100, atm.getBalance());
+        assertThrows(AtmCashOutException.class, () -> atm.cashOut(amount));
     }
 
     @Test
-    void testGetBalanceEmpty() {
-        assertEquals(0, atm.getBalance());
+    void getBalance() {
+        long balance = atm.getBalance();
+
+        assertEquals(initialBalance, balance);
     }
 }
