@@ -5,6 +5,9 @@ import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import java.util.ArrayList;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import ru.otus.kovaleva.listener.homework.HistoryListener;
+import ru.otus.kovaleva.model.Message;
+import ru.otus.kovaleva.model.ObjectForMessage;
 
 @SuppressWarnings({"java:S1135", "java:S125"})
 class HistoryListenerTest {
@@ -22,7 +25,7 @@ class HistoryListenerTest {
         field13Data.add(data);
         field13.setData(field13Data);
 
-        var message = new Message.Builder(id)
+        var message = new Message(id)
                 .field10("field10")
                 // TODO: раскоментировать       .field13(field13)
                 .build();
