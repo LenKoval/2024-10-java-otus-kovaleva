@@ -3,7 +3,6 @@ package ru.otus.kovaleva.listener;
 import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 import java.util.ArrayList;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import ru.otus.kovaleva.listener.homework.HistoryListener;
 import ru.otus.kovaleva.model.Message;
@@ -13,7 +12,7 @@ import ru.otus.kovaleva.model.ObjectForMessage;
 class HistoryListenerTest {
 
     @Test
-    @Disabled("удалить для запуска тест")
+    //@Disabled("удалить для запуска тест")
     void listenerTest() {
         // given
         var historyListener = new HistoryListener();
@@ -25,20 +24,19 @@ class HistoryListenerTest {
         field13Data.add(data);
         field13.setData(field13Data);
 
-        var message = new Message(id)
+        var message = new Message.Builder(id)
                 .field10("field10")
-                // TODO: раскоментировать       .field13(field13)
+                .field13(field13)
                 .build();
 
         // when
         historyListener.onUpdated(message);
-        // TODO: раскоментировать        message.getField13().setData(new ArrayList<>()); //меняем исходное сообщение
-        // TODO: раскоментировать        field13Data.clear(); //меняем исходный список
+        message.getField13().setData(new ArrayList<>()); //меняем исходное сообщение
+        field13Data.clear(); //меняем исходный список
 
         // then
         var messageFromHistory = historyListener.findMessageById(id);
         assertThat(messageFromHistory).isPresent();
-        // TODO: раскоментировать
-        // assertThat(messageFromHistory.get().getField13().getData()).containsExactly(data);
+        assertThat(messageFromHistory.get().getField13().getData()).containsExactly(data);
     }
 }

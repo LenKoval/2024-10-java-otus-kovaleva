@@ -12,6 +12,9 @@ import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import ru.otus.kovaleva.listener.Listener;
+import ru.otus.kovaleva.model.Message;
+import ru.otus.kovaleva.processor.Processor;
 
 public class ComplexProcessorTest {
 
