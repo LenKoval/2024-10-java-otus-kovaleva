@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.kovaleva.TimeBasedService;
+import ru.otus.kovaleva.processor.service.TimeBasedService;
 import ru.otus.kovaleva.model.Message;
 import ru.otus.kovaleva.processor.exceptions.TimeBasedException;
 

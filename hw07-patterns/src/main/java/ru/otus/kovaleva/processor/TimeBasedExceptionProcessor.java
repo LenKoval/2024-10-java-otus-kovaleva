@@ -1,6 +1,6 @@
 package ru.otus.kovaleva.processor;
 
-import ru.otus.kovaleva.TimeBasedService;
+import ru.otus.kovaleva.processor.service.TimeBasedService;
 import ru.otus.kovaleva.model.Message;
 import ru.otus.kovaleva.processor.exceptions.TimeBasedException;
 

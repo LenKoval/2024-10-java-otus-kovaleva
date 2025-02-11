@@ -1,4 +1,4 @@
-package ru.otus.kovaleva;
+package ru.otus.kovaleva.processor.service;
 
 import java.time.LocalDateTime;
 
