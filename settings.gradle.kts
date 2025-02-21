@@ -28,3 +28,4 @@ pluginManagement {
 include("hw05-aop")
 include("hw06-solid")
 include("hw07-patterns")
+include("hw08-serialization")
