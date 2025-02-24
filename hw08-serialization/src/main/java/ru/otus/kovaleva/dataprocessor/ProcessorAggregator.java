@@ -2,9 +2,9 @@ package ru.otus.kovaleva.dataprocessor;
 
 import ru.otus.kovaleva.model.Measurement;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 public class ProcessorAggregator implements Processor {
@@ -14,7 +14,7 @@ public class ProcessorAggregator implements Processor {
         return data.stream()
                 .collect(Collectors.groupingBy(
                         Measurement::name,
-                        LinkedHashMap::new,  // HashMap не гарантирует порядок поэтому использовала LinkedHasMap
+                        TreeMap::new,
                         Collectors.summingDouble(Measurement::value)
                 ));
     }
