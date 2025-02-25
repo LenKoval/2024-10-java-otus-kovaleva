@@ -28,7 +28,7 @@ public class ResourcesFileLoader implements Loader {
             return objectMapper.readValue(inputStream,
                     objectMapper.getTypeFactory().constructCollectionType(List.class, Measurement.class));
         } catch (IOException e) {
-            throw new RuntimeException("Error while reading a file: " + fileName, e);
+            throw new FileProcessException("Error while reading a file");
         }
     }
 }
