@@ -1,6 +1,9 @@
 package ru.otus.kovaleva.crm.model;
 
+import ru.otus.kovaleva.jdbc.mapper.annotation.Id;
+
 public class Client {
+    @Id
     private Long id;
     private String name;
 
