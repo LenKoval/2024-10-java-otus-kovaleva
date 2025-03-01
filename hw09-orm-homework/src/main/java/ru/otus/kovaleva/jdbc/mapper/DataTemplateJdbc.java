@@ -41,6 +41,10 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
 
     private T getResult(ResultSet rs) {
         try {
+            if (!rs.next()) {
+                return null;
+            }
+
             var object = entityClassMetaData.getConstructor().newInstance();
             for (var field : entityClassMetaData.getAllFields()) {
                 field.setAccessible(true);

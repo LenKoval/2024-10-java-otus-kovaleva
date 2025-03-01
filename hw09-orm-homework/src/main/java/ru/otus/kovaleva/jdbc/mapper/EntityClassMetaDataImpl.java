@@ -41,10 +41,13 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
     @Override
     public Field getIdField() {
-        return Arrays.stream(clazz.getDeclaredFields())
-                .filter(field -> field.isAnnotationPresent(Id.class))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("Id field not found for " + clazz.getName()));
+        if (idField == null) {
+            idField = Arrays.stream(clazz.getDeclaredFields())
+                    .filter(field -> field.isAnnotationPresent(Id.class))
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("Id field not found for " + clazz.getName()));
+        }
+        return idField;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
     public List<Field> getFieldsWithoutId() {
         if (fieldsWithoutId == null) {
             fieldsWithoutId = getAllFields().stream()
-                    .filter(field -> !field.equals(idField))
+                    .filter(field -> !field.equals(getIdField()))
                     .collect(Collectors.toList());
         }
         return fieldsWithoutId;
