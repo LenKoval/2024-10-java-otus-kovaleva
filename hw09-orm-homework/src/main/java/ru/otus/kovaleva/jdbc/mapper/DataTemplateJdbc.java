@@ -36,15 +36,20 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
     @Override
     public Optional<T> findById(Connection connection, long id) {
         return dbExecutor.executeSelect(connection, entitySQLMetaData.getSelectByIdSql(),
-                List.of(id), this::getResult);
+                List.of(id), rs -> {
+                    try {
+                        if (rs.next()) {
+                            return getResult(rs);  // Возвращается результат, если запись найдена
+                        }
+                        return null;  // Возвращается null, если запись не найдена
+                    } catch (SQLException e) {
+                        throw new DataTemplateException(e);
+                    }
+                });
     }
 
     private T getResult(ResultSet rs) {
         try {
-            if (!rs.next()) {
-                return null;
-            }
-
             var object = entityClassMetaData.getConstructor().newInstance();
             for (var field : entityClassMetaData.getAllFields()) {
                 field.setAccessible(true);
@@ -62,15 +67,15 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         return dbExecutor.executeSelect(connection, entitySQLMetaData.getSelectAllSql(),
                 Collections.emptyList(), rs -> {
                     var list = new ArrayList<T>();
-                    while (true) {
-                        try {
-                            if (!rs.next()) break;
-                        } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                    try {
+                        while (rs.next()) {
+                            list.add(getResult(rs));
                         }
-                        list.add(getResult(rs));
+                        return list;
+                    } catch (SQLException e) {
+                        logger.error("Error in findAll():{}", e);
+                        throw new DataTemplateException(e);
                     }
-                    return list;
                 }).orElseThrow(() -> {
             logger.error("Error in findAll().executeSelect");
             return new RuntimeException("Unexpected error");
