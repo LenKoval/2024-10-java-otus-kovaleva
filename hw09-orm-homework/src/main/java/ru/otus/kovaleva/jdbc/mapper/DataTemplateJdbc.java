@@ -57,7 +57,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             }
             return object;
         } catch (Exception e) {
-            logger.error("Error in getResult():{}", e);
+            logger.error("Error in getResult(): ", e);
             throw new DataTemplateException(e);
         }
     }
@@ -73,7 +73,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                         }
                         return list;
                     } catch (SQLException e) {
-                        logger.error("Error in findAll():{}", e);
+                        logger.error("Error in findAll(): ", e);
                         throw new DataTemplateException(e);
                     }
                 }).orElseThrow(() -> {
@@ -89,7 +89,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                     entitySQLMetaData.getInsertSql(),
                     getFieldsValues(client, entityClassMetaData.getFieldsWithoutId()));
         } catch (Exception e) {
-            logger.error("Error in insert():{}", e);
+            logger.error("Error in insert(): ", e);
             throw new DataTemplateException(e);
         }
     }
@@ -101,7 +101,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
             try {
                 list.add(field.get(client));
             } catch (IllegalAccessException e) {
-                logger.error("Error getting field value:{}", e);
+                logger.error("Error getting field value: ", e);
                 throw new DataTemplateException(e);
             }
         }
@@ -115,7 +115,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
                     entitySQLMetaData.getUpdateSql(),
                     getUpdateParams(client));
         } catch (Exception e) {
-            logger.error("Error in update():{}", e);
+            logger.error("Error in update(): ", e);
             throw new DataTemplateException(e);
         }
     }
@@ -131,7 +131,7 @@ public class DataTemplateJdbc<T> implements DataTemplate<T> {
         try {
             return field.get(client);
         } catch (IllegalAccessException e) {
-            logger.error("Error getting field value:{}", e);
+            logger.error("Error getting field value: ", e);
             throw new DataTemplateException(e);
         }
     }

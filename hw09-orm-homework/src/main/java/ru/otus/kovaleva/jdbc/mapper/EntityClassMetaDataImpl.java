@@ -31,12 +31,14 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
 
     @Override
     public Constructor<T> getConstructor() {
-        try {
-            constructor = clazz.getConstructor();
-            return constructor;
-        } catch (NoSuchMethodException e) {
-            throw new RuntimeException("No-arg constructor not found for " + clazz.getName());
+        if (constructor == null) {
+            try {
+                constructor = clazz.getConstructor();
+            } catch (NoSuchMethodException e) {
+                throw new IllegalStateException("No-arg constructor not found for " + clazz.getName(), e);
+            }
         }
+        return constructor;
     }
 
     @Override
