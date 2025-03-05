@@ -1,11 +1,14 @@
 package ru.otus.kovaleva.core.repository;
 
+import java.util.List;
 import java.util.Optional;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.kovaleva.base.AbstractHibernateTest;
+import ru.otus.kovaleva.crm.model.Address;
 import ru.otus.kovaleva.crm.model.Client;
+import ru.otus.kovaleva.crm.model.Phone;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,18 +16,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 class DataTemplateHibernateTest extends AbstractHibernateTest {
 
     @Test
-    @Disabled("Удалить при выполнении ДЗ")
     @DisplayName(" корректно сохраняет, изменяет и загружает клиента по заданному id")
     void shouldSaveAndFindCorrectClientById() {
         // given
-        var client = new Client("Вася");
-
-        // Это надо раскомментировать, у выполненного ДЗ, все тесты должны проходить
-        // Кроме удаления комментирования, тестовый класс менять нельзя
-        /*
-                var client = new Client(null, "Vasya", new Address(null, "AnyStreet"), List.of(new Phone(null, "13-555-22"),
-                        new Phone(null, "14-666-333")));
-        */
+        var client = new Client(null, "Vasya", new Address(null, "AnyStreet"), List.of(new Phone(null, "13-555-22"),
+                new Phone(null, "14-666-333")));
 
         // when
         var savedClient = transactionManager.doInTransaction(session -> {

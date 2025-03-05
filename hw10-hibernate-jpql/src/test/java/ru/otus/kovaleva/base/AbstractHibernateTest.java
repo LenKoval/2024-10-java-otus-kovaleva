@@ -13,7 +13,9 @@ import ru.otus.kovaleva.core.repository.DataTemplateHibernate;
 import ru.otus.kovaleva.core.repository.HibernateUtils;
 import ru.otus.kovaleva.core.sessionmanager.TransactionManagerHibernate;
 import ru.otus.kovaleva.crm.dbmigrations.MigrationsExecutorFlyway;
+import ru.otus.kovaleva.crm.model.Address;
 import ru.otus.kovaleva.crm.model.Client;
+import ru.otus.kovaleva.crm.model.Phone;
 import ru.otus.kovaleva.crm.service.DBServiceClient;
 import ru.otus.kovaleva.crm.service.DbServiceClientImpl;
 
@@ -51,7 +53,7 @@ public class AbstractHibernateTest {
         configuration.setProperty("hibernate.connection.username", dbUserName);
         configuration.setProperty("hibernate.connection.password", dbPassword);
 
-        sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class); //сюда передаются два класса после разметки
+        sessionFactory = HibernateUtils.buildSessionFactory(configuration, Client.class, Address.class, Phone.class);
 
         transactionManager = new TransactionManagerHibernate(sessionFactory);
         clientTemplate = new DataTemplateHibernate<>(Client.class);
