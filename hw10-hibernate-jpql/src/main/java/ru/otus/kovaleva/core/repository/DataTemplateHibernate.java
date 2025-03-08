@@ -17,7 +17,6 @@ public class DataTemplateHibernate<T> implements DataTemplate<T> {
         return Optional.ofNullable(session.find(clazz, id));
     }
 
-    //обратить внимание на этот метод
     @Override
     public List<T> findByEntityField(Session session, String entityFieldName, Object entityFieldValue) {
         var criteriaBuilder = session.getCriteriaBuilder();
